@@ -18,6 +18,8 @@ public class App {
 
     public static void main(String[] args) {
 
+        creaProdotto("02", "samsung S09", 250f);
+        
         Prodotto[] prodotti = caricaProdotti();
 
         for (Prodotto pr : prodotti) {
@@ -33,6 +35,27 @@ public class App {
 
     }
 
+    public static void creaProdotto(String codice, String descrizione, float prezzo) {
+
+        Prodotto p = new Prodotto();
+        p.setCodice(codice);
+        p.setDescrizione(descrizione);
+        p.setPrezzo(prezzo);
+
+        EntityManagerFactory conn = Persistence.createEntityManagerFactory("magazzino");
+
+        EntityManager em = conn.createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        em.merge(p);
+        
+        em.getTransaction().commit();
+        
+        em.close();
+
+    }
+
     /**
      * esegue la query e torna un array di oggetti prodotto
      *
@@ -44,7 +67,7 @@ public class App {
 
         EntityManager em = conn.createEntityManager();
 
-        List<Prodotto> result = em.createQuery("select p from Prodotto p", Prodotto.class)
+        List<Prodotto> result = em.createQuery("select p from Prodotto p order by p.descrizione", Prodotto.class)
                 .getResultList();
 
         em.close();
