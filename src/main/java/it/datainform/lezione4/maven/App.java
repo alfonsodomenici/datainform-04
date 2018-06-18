@@ -41,7 +41,7 @@ public class App {
         p.setCodice(codice);
         p.setDescrizione(descrizione);
         p.setPrezzo(prezzo);
-
+                
         EntityManagerFactory conn = Persistence.createEntityManagerFactory("magazzino");
 
         EntityManager em = conn.createEntityManager();

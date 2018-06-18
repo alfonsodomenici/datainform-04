@@ -6,17 +6,14 @@
 package it.datainform.lezione4.maven;
 
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  *
  * @author alfonso
  */
 @Entity
-@Table(name = "")
 public class Prodotto implements Serializable {
 
     @Id
