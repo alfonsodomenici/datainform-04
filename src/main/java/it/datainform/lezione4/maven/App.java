@@ -5,7 +5,9 @@
  */
 package it.datainform.lezione4.maven;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,20 +20,27 @@ public class App {
 
     public static void main(String[] args) {
 
-        creaProdotto("02", "samsung S09", 250f);
-        
-        Prodotto[] prodotti = caricaProdotti();
+        Scanner s = new Scanner(System.in);
+        String scelta;
+        do {
+            stampaMenu();
+            scelta = s.nextLine();
+            switch (scelta) {
+                case "1":
+                    menuElencoProdotti();
+                    break;
+                case "2":
+                    menuNuovoProdotto(s);
+                    break;
+                case "3":
+                    menuEsci();
+                    break;
+                default:
+                    System.out.println("Scelta non corretta..");
+            }
+        } while (!scelta.equals("3"));
 
-        for (Prodotto pr : prodotti) {
-            pr.stampa();
-        }
-
-        System.out.println("----------------------------");
-
-        for (int i = 0; i < prodotti.length; i++) {
-            Prodotto pr = prodotti[i];
-            pr.stampa();
-        }
+        System.out.println("------------ End gestione prodotti ---------------");
 
     }
 
@@ -41,17 +50,17 @@ public class App {
         p.setCodice(codice);
         p.setDescrizione(descrizione);
         p.setPrezzo(prezzo);
-                
+
         EntityManagerFactory conn = Persistence.createEntityManagerFactory("magazzino");
 
         EntityManager em = conn.createEntityManager();
-        
+
         em.getTransaction().begin();
-        
+
         em.merge(p);
-        
+
         em.getTransaction().commit();
-        
+
         em.close();
 
     }
@@ -74,6 +83,47 @@ public class App {
 
         return result.toArray(new Prodotto[result.size()]);
 
+    }
+
+    private static void menuElencoProdotti() {
+        Prodotto[] prodotti = caricaProdotti();
+        System.out.println("------------ Elenco prodotti--------------");
+        Arrays.asList(prodotti).stream().forEach(p -> p.stampa());
+        System.out.println("------------- fine elenco prodotti --------");
+    }
+
+    private static void menuEsci() {
+        System.out.println("Arrivederci e grazie...");
+    }
+
+    private static void stampaMenu() {
+        System.out.println("");
+        System.out.println("");
+
+        System.out.println("------------ Start gestione prodotti ---------------");
+
+        System.out.println("---------------- Menu principale -------------------");
+
+        System.out.println("1 - Elenco prodotti");
+
+        System.out.println("2 - Nuovo prodotto");
+
+        System.out.println("3 - Esci");
+
+        System.out.println("-----------------------------------------------------");
+
+        System.out.println("Che vuoi fare?");
+    }
+
+    private static void menuNuovoProdotto(Scanner s) {
+        System.out.println("Inserisci codice prodotto");
+        String codice = s.nextLine();
+        System.out.println("Inserisci descrizione prodotto");
+        String nome = s.nextLine();
+        System.out.println("Inserisci prezzo prodotto");
+        float prezzo = s.nextFloat();
+        creaProdotto(codice, nome, prezzo);
+        System.out.println("il prodotto è stato inserito");
     }
 
 }
